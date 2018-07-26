@@ -10,8 +10,8 @@ class Vision:
     def start(self):
         self.online = True
         self.spot_handler.start()
-        self.spot_handler.play_specific_song("Why")
-        #self.speech_handler.setup()
+        self.spot_handler.get_saved_tracks()
+        self.spot_handler.play_specific_song("Over Now")
 
     def stop(self):
         self.online = False

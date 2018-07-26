@@ -1,6 +1,7 @@
 import spotipy
 import spotipy.util as util
 import os
+import json
 
 
 class SpotifyHandler:
@@ -26,19 +27,15 @@ class SpotifyHandler:
     def get_saved_tracks(self):
         results = self.sp.current_user_saved_tracks()
         for item in results['items']:
+            print(item)
             track = item['track']
             print(track['name'] + ' - ' + track['artists'][0]['name'])
 
     def play_next_song(self):
         self.sp.next_track(self.deviceID)
 
-    def play_specific_song(self, uri):
-        album = self.sp.artist_albums("246dkjvS1zLTtiykXe5h60")["items"]
-        for item in album:
-            print("AlBUM: " + item["name"])
-
-
-#track = self.sp.track("61jnrkPHpLumBf1kqGpRRt")
-#print(track)
-#self.sp.start_playback(self.deviceID, None, [track])
+    def play_specific_song(self, name):
+        search = self.sp.search(name)
+        items = [search["tracks"]["items"][0]["uri"]]
+        self.sp.start_playback(self.deviceID, None, items)
 
