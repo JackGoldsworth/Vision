@@ -1,22 +1,25 @@
-import os
-from pocketsphinx import LiveSpeech, get_model_path
+import speech_recognition as sr
 
 
 class SpeechHandler:
 
     speech = None
-    model_path = get_model_path()
+    mic = None
 
     def setup(self):
-        self.speech = LiveSpeech(
-            verbose=False,
-            sampling_rate=16000,
-            buffer_size=2048,
-            no_search=False,
-            full_utt=False,
-            hmm=os.path.join(self.model_path, 'en-us'),
-            lm=os.path.join(self.model_path, 'en-us.lm.bin'),
-            dic=os.path.join(self.model_path, 'cmudict-en-us.dict')
-        )
-        for phrase in self.speech:
-            print(phrase.hypothesis())
+        self.speech = sr.Recognizer()
+        self.mic = sr.Microphone()
+
+    def listen(self, vision):
+        while vision.online:
+            try:
+                with self.mic as source:
+                    print("Listening")
+                    audio = self.speech.listen(source, phrase_time_limit=10)
+                    sphinx = self.speech.recognize_sphinx(audio)
+                    sphinx_str = str(sphinx).partition(" ")
+                    if sphinx_str[0] == "play":
+                        vision.get_spotify_handler().play_specific_artist_song("Weekend", "Mac Miller")
+                        print(sphinx)
+            except sr.UnknownValueError:
+                pass

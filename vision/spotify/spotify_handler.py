@@ -1,7 +1,6 @@
 import spotipy
 import spotipy.util as util
 import os
-import json
 
 
 class SpotifyHandler:
@@ -42,11 +41,9 @@ class SpotifyHandler:
     def play_specific_artist_song(self, name, artist_name):
         search = self.sp.search(name)
         items = search["tracks"]["items"]
-        for i, item in enumerate(items, start=0):
+        for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
-            print(name)
-            print(i)
             if name == artist_name:
                 items = [search["tracks"]["items"][i]["uri"]]
                 self.sp.start_playback(self.deviceID, None, items)
