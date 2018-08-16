@@ -12,7 +12,7 @@ class SpotifyHandler:
     scope = 'user-library-read user-read-currently-playing user-modify-playback-state user-read-playback-state'
 
     def start(self):
-        username = input("Please enter your spotify username ")
+        username = input("Please enter your Spotify username ")
         try:
             self.token = util.prompt_for_user_token(username, self.scope)
         except AttributeError:

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 
 class DesktopHandler:
@@ -20,6 +21,12 @@ class DesktopHandler:
 
     def create_folder(self, folder_name):
         try:
-            os.mkdir("D:\\{0}".format(folder_name))
+            paths = [Path("D:\\{0}".format(folder_name)), Path("C:\\{0}".format(folder_name))]
+            for i in range(2):
+                if paths[i].exists():
+                    continue
+                else:
+                    os.mkdir(paths[i])
+                    break
         except OSError:
             print("Failed to make folder")
