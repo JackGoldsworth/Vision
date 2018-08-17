@@ -12,7 +12,6 @@ class Vision:
         self.online = True
         self.spot_handler.start()
         self.speech_handler.listen(self)
-        # self.spot_handler.play_specific_artist_song("Weekend", "Mac Miller")
 
     def stop(self):
         self.online = False

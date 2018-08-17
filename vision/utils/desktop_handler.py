@@ -24,7 +24,7 @@ class DesktopHandler:
             paths = [Path("D:\\{0}".format(folder_name)), Path("C:\\{0}".format(folder_name))]
             for i in range(2):
                 if paths[i].exists():
-                    continue
+                    return
                 else:
                     os.mkdir(paths[i])
                     break

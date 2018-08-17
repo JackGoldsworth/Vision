@@ -32,35 +32,27 @@ class SpeechHandler:
         if command == "play":
             if words.__contains__("by"):
                 self.index = 0
-                spot.play_specific_artist_song(self.get_all_words_until(words, "by"),
-                                               self.get_all_words_until(words, "end"))
+                final = self.get_all_words_until(words, ["by", "?"])
+                spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
             else:
                 self.index = 0
                 spot.play_specific_song(self.get_all_words_until(words, "end"))
         elif command == "stop":
             vision.online = False
 
-    def get_all_words_until(self, sentence, word):
-        index = self.index
-        words = list()
-        print(sentence)
+    @staticmethod
+    def get_all_words_until(sentence, words):
         sentence.pop(0)
         sentence.pop(0)
-        print(sentence)
-        if word != "end":
-            for i, w in enumerate(sentence):
-                if w != (word or "vision"):
-                    words.insert(i, w)
-                else:
-                    index = i
-                    break
-            self.index = index
-            print(" ".join(words))
-            return" ".join(words)
-        else:
-            if "by" in sentence:
-                print(" ".join(sentence[index + 1:]))
-                return " ".join(sentence[index + 1:])
+        word_dict = dict()
+        index = 0
+        for i, w in enumerate(words):
+            if w != "?":
+                index = sentence.index(words[i])
+                word_dict[i] = sentence[:index]
             else:
-                print(" ".join(sentence))
-                return " ".join(sentence)
+                if len(words) == 1:
+                    word_dict[i] = sentence[index:]
+                else:
+                    word_dict[i] = sentence[index + 1:]
+        return word_dict
