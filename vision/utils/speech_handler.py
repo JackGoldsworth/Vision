@@ -16,10 +16,11 @@ class SpeechHandler:
             try:
                 with self.mic as source:
                     print("Listening")
-                    audio = self.speech.listen(source, phrase_time_limit=10)
+                    audio = self.speech.listen(source)
                     google = self.speech.recognize_google(audio)
                     google_str = str(google).split()
                     if google_str[0].lower() == "vision":
+                        print(google_str)
                         self.handle_commands(google_str, vision)
             except sr.UnknownValueError:
                 pass
@@ -30,13 +31,14 @@ class SpeechHandler:
         command = words[1]
         spot = vision.get_spotify_handler()
         if command == "play":
-            if words.__contains__("by"):
+            if "by" in words:
                 self.index = 0
                 final = self.get_all_words_until(words, ["by", "?"])
+                print(final)
                 spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
             else:
                 self.index = 0
-                spot.play_specific_song(self.get_all_words_until(words, "end"))
+                spot.play_specific_song(str(self.get_all_words_until(words, "?")[0]))
         elif command == "stop":
             vision.online = False
 
