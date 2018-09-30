@@ -40,11 +40,14 @@ class SpotifyHandler:
         self.sp.start_playback(self.deviceID, None, items)
 
     def play_specific_artist_song(self, name, artist_name):
-        search = self.sp.search(str(name).lower(), type='track')
+        name = str(name).lower()
+        artist_name = str(artist_name).lower()
+        search = self.sp.search(str(name).lower(), type='track', limit=20)
         items = search["tracks"]["items"]
         for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
+            name = str(name).lower()
             if name == artist_name:
                 items = [search["tracks"]["items"][i]["uri"]]
                 self.sp.start_playback(self.deviceID, None, items)

@@ -4,14 +4,18 @@ from utils import SpotifyHandler, SpeechHandler, DesktopHandler
 class Vision:
 
     online = False
+    text_mode = True
     spot_handler = SpotifyHandler()
-    speech_handler = SpeechHandler()
     desktop_handler = DesktopHandler("Programs")
+    speech_handler = SpeechHandler(desktop_handler)
 
     def start(self):
         self.online = True
         self.spot_handler.start()
         self.speech_handler.listen(self)
+
+    def set_text_mod(self, on):
+        self.text_mode = on
 
     def stop(self):
         self.online = False
