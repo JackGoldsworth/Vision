@@ -15,7 +15,7 @@ class SpeechHandler:
 
     def listen(self, vision):
         if vision.text_mode:
-            while vision.online:
+            while vision.online and vision.text_mode:
                 command = input("Enter a command\n")
                 command = str(command).split()
                 if command[0].lower() == "vision" and len(command) > 1:
@@ -53,9 +53,9 @@ class SpeechHandler:
             self.desktop_handler.close_program(words[2])
         elif command == "text" and len(words) > 2:
             option = words[2].lower()
-            if option == "true":
+            if option == "on":
                 vision.text_mode = True
-            elif option == "false":
+            elif option == "off":
                 vision.text_mode = False
 
     @staticmethod
