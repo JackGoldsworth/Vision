@@ -5,21 +5,14 @@ class SpeechHandler:
 
     speech = None
     mic = None
-    desktop_handler = None
+    index = 0
 
-    def __init__(self, desktop_handler):
+    def __init__(self):
         self.speech = sr.Recognizer()
         self.mic = sr.Microphone()
-        self.desktop_handler = desktop_handler
 
     def listen(self, vision):
-        if vision.text_mode:
-            while vision.online:
-                command = input("Enter a command\n")
-                command = str(command).split()
-                if command[0].lower() == "vision" and command[1] is not None:
-                    self.handle_commands(command, vision)
-        while vision.online and not vision.text_mode:
+        while vision.online:
             try:
                 with self.mic as source:
                     print("Listening")
@@ -27,7 +20,6 @@ class SpeechHandler:
                     google = self.speech.recognize_google(audio)
                     google_str = str(google).split()
                     if google_str[0].lower() == "vision":
-                        print(google_str)
                         self.handle_commands(google_str, vision)
             except sr.UnknownValueError:
                 pass
@@ -38,26 +30,15 @@ class SpeechHandler:
         command = words[1]
         spot = vision.get_spotify_handler()
         if command == "play":
-            if "by" in words:
+            if words.__contains__("by"):
+                self.index = 0
                 final = self.get_all_words_until(words, ["by", "?"])
-                song = " ".join(final[0])
-                artist = " ".join(final[1])
-                spot.play_specific_artist_song(song, artist)
-                print(song, artist)
+                spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
             else:
+                self.index = 0
                 spot.play_specific_song(self.get_all_words_until(words, "end"))
-        elif command == "stop" or command == "close":
+        elif command == "stop":
             vision.online = False
-        elif command == "open":
-            self.desktop_handler.open_program(words[2])
-        elif command == "close" and words[2] is not None:
-            self.desktop_handler.close_program(words[2])
-        elif command == "text" and words[2] is not None:
-            option = words[2].lower()
-            if option == "true":
-                vision.text_mode = True
-            elif option == "false":
-                vision.text_mode = False
 
     @staticmethod
     def get_all_words_until(sentence, words):
