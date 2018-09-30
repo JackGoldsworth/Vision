@@ -11,7 +11,6 @@ class Vision:
 
     def start(self):
         self.online = True
-        self.spot_handler.start()
         self.speech_handler.listen(self)
 
     def set_text_mod(self, on):

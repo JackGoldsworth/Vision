@@ -38,13 +38,13 @@ class SpeechHandler:
         command = words[1]
         spot = vision.get_spotify_handler()
         if command == "play":
-            if words.__contains__("by"):
+            if "by" in words:
                 self.index = 0
                 final = self.get_all_words_until(words, ["by", "?"])
                 spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
             else:
                 self.index = 0
-                spot.play_specific_song(self.get_all_words_until(words, "end"))
+                spot.play_specific_song(self.get_all_words_until(words, "?"))
         elif command == "stop" or command == "close" and len(words) == 2:
             vision.online = False
         elif command == "open":
@@ -57,6 +57,10 @@ class SpeechHandler:
                 vision.text_mode = True
             elif option == "off":
                 vision.text_mode = False
+        elif command == "login" and len(words) > 2:
+            program_login = words[2].lower()
+            if program_login == "spotify":
+                vision.get_spotify_handler().start()
 
     @staticmethod
     def get_all_words_until(sentence, words):
