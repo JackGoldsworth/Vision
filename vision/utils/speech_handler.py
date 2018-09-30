@@ -5,14 +5,22 @@ class SpeechHandler:
 
     speech = None
     mic = None
+    desktop_handler = None
     index = 0
 
-    def __init__(self):
+    def __init__(self, desktop_handler):
         self.speech = sr.Recognizer()
         self.mic = sr.Microphone()
+        self.desktop_handler = desktop_handler
 
     def listen(self, vision):
-        while vision.online:
+        if vision.text_mode:
+            while vision.online:
+                command = input("Enter a command\n")
+                command = str(command).split()
+                if command[0].lower() == "vision" and len(command) > 1:
+                    self.handle_commands(command, vision)
+        while vision.online and not vision.text_mode:
             try:
                 with self.mic as source:
                     print("Listening")
@@ -37,8 +45,18 @@ class SpeechHandler:
             else:
                 self.index = 0
                 spot.play_specific_song(self.get_all_words_until(words, "end"))
-        elif command == "stop":
+        elif command == "stop" or command == "close" and len(words) == 2:
             vision.online = False
+        elif command == "open":
+            self.desktop_handler.open_program(words[2])
+        elif command == "close" and len(words) == 3:
+            self.desktop_handler.close_program(words[2])
+        elif command == "text" and len(words) > 2:
+            option = words[2].lower()
+            if option == "true":
+                vision.text_mode = True
+            elif option == "false":
+                vision.text_mode = False
 
     @staticmethod
     def get_all_words_until(sentence, words):

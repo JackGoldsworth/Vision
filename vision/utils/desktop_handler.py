@@ -4,12 +4,15 @@ from pathlib import Path
 
 class DesktopHandler:
 
+    folder_name = ""
+
     def __init__(self, folder_name):
         self.create_folder(folder_name)
+        self.folder_name = folder_name
 
     def open_program(self, program_name):
         try:
-            os.startfile(program_name)
+            os.startfile("C:\\" + self.folder_name + " + \\" + program_name)
         except OSError:
             print("File failed to open")
 
@@ -20,13 +23,11 @@ class DesktopHandler:
             print("File failed to close")
 
     def create_folder(self, folder_name):
+        path = Path("C:\\{0}".format(folder_name))
         try:
-            paths = [Path("D:\\{0}".format(folder_name)), Path("C:\\{0}".format(folder_name))]
-            for i in range(2):
-                if paths[i].exists():
-                    return
-                else:
-                    os.mkdir(paths[i])
-                    break
+            if path.exists():
+                return
+            else:
+                os.mkdir(path)
         except OSError:
             print("Failed to make folder")
