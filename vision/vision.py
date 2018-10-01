@@ -13,9 +13,6 @@ class Vision:
         self.online = True
         self.speech_handler.listen(self)
 
-    def set_text_mod(self, on):
-        self.text_mode = on
-
     def stop(self):
         self.online = False
 
