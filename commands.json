@@ -1,0 +1,17 @@
+{
+  "close": {
+    "description": "Shuts off the program",
+    "usage": "vision close",
+    "parser": ""
+  },
+  "stop song": {
+    "description": "Stops the current song",
+    "usage": "vision stop song",
+    "parser": ""
+  },
+  "play": {
+    "description": "Plays a song either by the artist or song name",
+    "usage": "vision play <song> || vision play <song> by <artist>",
+    "parser": "vision play ? || vision play ? by ?"
+  }
+}
