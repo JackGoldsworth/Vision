@@ -1,9 +1,8 @@
 class CommandInfo:
-    definition = None
-    usage = None
-    parser_info = None
 
-    def __init__(self, definition, usage, parser_info):
-        self.definition = definition
+    description = None
+    usage = None
+
+    def __init__(self, description, usage):
+        self.description = description
         self.usage = usage
-        self.parser_info = parser_info

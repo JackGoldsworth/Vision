@@ -14,14 +14,14 @@ class CommandParser:
         :param file_name: the file name
         """
         with open(file_name) as file:
-            json_file = json.loads(file)
+            json_file = json.load(file)
             for command in json_file:
-                self.commands[command] = CommandInfo(command["definition"], command["usage"], command["parser"])
+                self.commands[command] = CommandInfo(json_file[command]["description"], json_file[command]["usage"])
 
     def list_commands(self):
         """
         Prints out a list of all of the commands loaded.
         """
         for name, info in self.commands.items():
-            print("**Command Name: %(name)s\nDescription: %(description)s\nUsage: %(usage)s\n", name=name,
-                  description=info().description, usage=info().usage)
+            print("**Command Name: {}\nDescription: {}\nUsage: {}\n".format(name,
+                  info.description, info.usage))

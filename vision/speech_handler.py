@@ -47,16 +47,36 @@ class SpeechHandler:
         """
         if words[1] is None:
             return
-        commands = vision.command_parser.commands
-        parser = commands["parser"]
-        for i, command in enumerate(commands, 0):
-            command_str = str(command_str).split()
-            for j in len(command_str):
-                if words[j] == command_str[j]:
-                    return  # Finish Later
-
-
-
+        command = words[1]
+        spot = vision.spot_handler
+        if command == "play":
+            if "by" in words:
+                self.index = 0
+                final = self.get_all_words_until(words, ["by", "?"])
+                spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
+            else:
+                self.index = 0
+                spot.play_specific_song(self.get_all_words_until(words, "?"))
+        elif command == "list" and len(words) > 2:
+            option = words[2]
+            if option == "commands":
+                vision.command_parser.list_commands()
+        elif command == "stop" or command == "close" and len(words) == 2:
+            vision.online = False
+        elif command == "open":
+            self.desktop_handler.open_program(words[2])
+        elif command == "close" and len(words) == 3:
+            self.desktop_handler.close_program(words[2])
+        elif command == "text" and len(words) > 2:
+            option = words[2].lower()
+            if option == "on":
+                vision.text_mode = True
+            elif option == "off":
+                vision.text_mode = False
+        elif command == "login" and len(words) > 2:
+            program_login = words[2].lower()
+            if program_login == "spotify":
+                vision.spot_handler.start()
 
     @staticmethod
     def get_all_words_until(sentence, words):
@@ -80,33 +100,3 @@ class SpeechHandler:
                 else:
                     word_dict[i] = sentence[index + 1:]
         return word_dict
-
-    # def handle_commands(self, words, vision):
-    #     if words[1] is None:
-    #         return
-    #     command = words[1]
-    #     spot = vision.get_spotify_handler()
-    #     if command == "play":
-    #         if "by" in words:
-    #             self.index = 0
-    #             final = self.get_all_words_until(words, ["by", "?"])
-    #             spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
-    #         else:
-    #             self.index = 0
-    #             spot.play_specific_song(self.get_all_words_until(words, "?"))
-    #     elif command == "stop" or command == "close" and len(words) == 2:
-    #         vision.online = False
-    #     elif command == "open":
-    #         self.desktop_handler.open_program(words[2])
-    #     elif command == "close" and len(words) == 3:
-    #         self.desktop_handler.close_program(words[2])
-    #     elif command == "text" and len(words) > 2:
-    #         option = words[2].lower()
-    #         if option == "on":
-    #             vision.text_mode = True
-    #         elif option == "off":
-    #             vision.text_mode = False
-    #     elif command == "login" and len(words) > 2:
-    #         program_login = words[2].lower()
-    #         if program_login == "spotify":
-    #             vision.get_spotify_handler().start()
