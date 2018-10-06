@@ -1,14 +1,30 @@
 {
   "close": {
-    "description": "Shuts off the program",
-    "usage": "vision close"
+    "description": "Shuts off the program, or a specific program",
+    "usage": "vision close || vision close <program name>"
+  },
+  "list": {
+    "description": "Lists a certain list",
+    "usage": "vision list <list> (Currently only supports the list <commands>)"
+  },
+  "login": {
+    "description": "Prompts login to a specific app",
+    "usage": "vision login <App>"
+  },
+  "open": {
+    "description": "Allows a user to open an app in the programs directory on the C drive",
+    "usage": "vision open <program name>"
+  },
+  "play": {
+    "description": "Plays a song either by the artist or song name",
+    "usage": "vision play <song> || vision play <song> by <artist>"
   },
   "stop song": {
     "description": "Stops the current song",
     "usage": "vision stop song"
   },
-  "play": {
-    "description": "Plays a song either by the artist or song name",
-    "usage": "vision play <song> || vision play <song> by <artist>"
+  "text": {
+    "description": "Allows the user to turn text mode on or off",
+    "usage": "vision text <on/off>"
   }
 }
