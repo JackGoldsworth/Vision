@@ -129,3 +129,16 @@ class SpeechHandler:
                 else:
                     word_dict[i] = sentence[index + 1:]
         return word_dict
+
+    @staticmethod
+    def ccs(string1, string2):
+        """
+        Compare case sensitive strings.
+        :param string1: First string
+        :param string2: Second string
+        :return: True or false if equal
+        """
+        if string1.lower() == string2.lower():
+            return True
+        else:
+            return False

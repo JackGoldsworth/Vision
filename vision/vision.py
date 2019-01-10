@@ -5,10 +5,10 @@ from spotify_handler import SpotifyHandler
 
 
 class Vision:
-
     online = False
     text_mode = False
     debug_mode = False
+    song_profanity = True  # TODO: Make settings json
     spot_handler = SpotifyHandler()
     desktop_handler = DesktopHandler("Programs")
     speech_handler = SpeechHandler(desktop_handler)

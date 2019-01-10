@@ -3,6 +3,8 @@ import os
 import spotipy
 import spotipy.util as util
 
+from speech_handler import SpeechHandler
+
 
 class SpotifyHandler:
 
@@ -54,7 +56,8 @@ class SpotifyHandler:
         """
         search = self.sp.search(name)
         items = [search["tracks"]["items"][0]["uri"]]
-        self.sp.start_playback(self.deviceID, None, items)
+        if search["tracks"]["items"][0]["explicit"] is self.vision.song_profanity:
+            self.sp.start_playback(self.deviceID, None, items)
 
     def play_specific_artist_song(self, name, artist_name):
         """
@@ -70,11 +73,19 @@ class SpotifyHandler:
         for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
-            if name == artist_name:
+            if SpeechHandler.ccs(name, artist_name):
                 items = [search["tracks"]["items"][i]["uri"]]
-                self.sp.start_playback(self.deviceID, None, items)
+                if search["tracks"]["items"][i]["explicit"] is self.vision.song_profanity:
+                    self.sp.start_playback(self.deviceID, None, items)
+                    break
 
     def play_specific_artist_album(self, name, artist_name):
+        """
+        Plays a specific album based on artist and album name.
+
+        :param name: Album name
+        :param artist_name: Singer/Band name.
+        """
         search = self.sp.search(str(name).lower(), type='album')
         if self.vision.debug_mode is True:
             print(search)
@@ -82,6 +93,10 @@ class SpotifyHandler:
         for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
-            if name == artist_name and search["albums"]["items"][i]["album_type"] == "album":
+            if SpeechHandler.ccs(name, artist_name) and search["albums"]["items"][i]["album_type"] == "album":
+                # Checking song profanity
                 items = search["albums"]["items"][i]["uri"]
-                self.sp.start_playback(self.deviceID, items)
+                tracks = self.sp.album_tracks(items, 1)
+                if tracks["items"][0]["explicit"] is self.vision.song_profanity:
+                    self.sp.start_playback(self.deviceID, items)
+                    break
