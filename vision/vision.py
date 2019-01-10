@@ -16,7 +16,6 @@ class Vision:
 
     def start(self):
         self.online = True
-        self.spot_handler.start(self)
         self.command_parser.get_command_file("commands.json")
         self.speech_handler.listen(self)
 

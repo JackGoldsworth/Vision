@@ -94,7 +94,7 @@ class SpeechHandler:
         elif command == "login" and len(words) > 2:
             program_login = words[2].lower()
             if program_login == "spotify":
-                vision.spot_handler.start()
+                vision.spot_handler.start(vision)
         # Play Next Spotify Song
         elif command == "next" and len(words) > 2:
             if words[2].lower() == "song":
