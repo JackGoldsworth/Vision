@@ -9,13 +9,15 @@ class SpotifyHandler:
     token = None
     sp = None
     deviceID = None
+    vision = None
     scope = 'user-library-read user-read-currently-playing user-modify-playback-state user-read-playback-state'
 
-    def start(self):
+    def start(self, vision):
         """
         Starts the Spotify api and makes sure
         that there is a device to append to.
         """
+        self.vision = vision
         username = input("Please enter your Spotify username ")
         try:
             self.token = util.prompt_for_user_token(username, self.scope)
@@ -62,6 +64,8 @@ class SpotifyHandler:
         :param artist_name: Singer/Band name.
         """
         search = self.sp.search(str(name).lower(), type='track')
+        if self.vision.debug_mode is True:
+            print(search)
         items = search["tracks"]["items"]
         for i, item in enumerate(items):
             artist = item["artists"]
@@ -70,3 +74,14 @@ class SpotifyHandler:
                 items = [search["tracks"]["items"][i]["uri"]]
                 self.sp.start_playback(self.deviceID, None, items)
 
+    def play_specific_artist_album(self, name, artist_name):
+        search = self.sp.search(str(name).lower(), type='album')
+        if self.vision.debug_mode is True:
+            print(search)
+        items = search["albums"]["items"]
+        for i, item in enumerate(items):
+            artist = item["artists"]
+            name = artist[0]["name"]
+            if name == artist_name and search["albums"]["items"][i]["album_type"] == "album":
+                items = search["albums"]["items"][i]["uri"]
+                self.sp.start_playback(self.deviceID, items)

@@ -19,12 +19,24 @@
     "description": "Plays a song either by the artist or song name",
     "usage": "vision play <song> || vision play <song> by <artist>"
   },
+  "play album": {
+    "description": "Plays an album either by the artist",
+    "usage": "vision play album <album name> by <artist>"
+  },
   "stop song": {
     "description": "Stops the current song",
     "usage": "vision stop song"
   },
+  "next song": {
+    "description": "Goes to the next song",
+    "usage": "vision next song"
+  },
   "text": {
     "description": "Allows the user to turn text mode on or off",
     "usage": "vision text <on/off>"
+  },
+  "debug": {
+    "description": "Allows the user to turn debug mode on or off",
+    "usage": "vision debug <on/off>"
   }
 }

@@ -30,10 +30,12 @@ class SpeechHandler:
             try:
                 with self.mic as source:
                     print("Listening")
-                    audio = self.speech.listen(source, phrase_time_limit=10)
+                    audio = self.speech.listen(source, phrase_time_limit=5)
                     google = self.speech.recognize_google(audio)
                     google_str = str(google).split()
                     if google_str[0].lower() == "vision":
+                        if vision.debug_mode is True:
+                            print(google_str)
                         self.handle_commands(google_str, vision)
             except sr.UnknownValueError:
                 pass
@@ -45,49 +47,77 @@ class SpeechHandler:
         :param words: The words typed or spoke from listen().
         :param vision: The core vision class.
         """
-        if words[1] is None:
-            return
-        command = words[1]
+        try:
+            words[1]
+        except IndexError:
+            return None
+        command = words[1].lower()
         spot = vision.spot_handler
+        # Play Spotify Song or album
         if command == "play":
-            if "by" in words:
-                self.index = 0
-                final = self.get_all_words_until(words, ["by", "?"])
-                spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
+            if words[2].lower() == "album":
+                if "by" in words:
+                    self.index = 0
+                    final = self.get_all_words_until(words, ["by", "?"], 3)
+                    print(" ".join(final[0]), " ".join(final[1]))
+                    spot.play_specific_artist_album(" ".join(final[0]), " ".join(final[1]))
             else:
-                self.index = 0
-                spot.play_specific_song(self.get_all_words_until(words, "?"))
+                if "by" in words:
+                    self.index = 0
+                    final = self.get_all_words_until(words, ["by", "?"])
+                    spot.play_specific_artist_song(" ".join(final[0]), " ".join(final[1]))
+                else:
+                    self.index = 0
+                    spot.play_specific_song(self.get_all_words_until(words, "?"))
+        # List commands
         elif command == "list" and len(words) > 2:
             option = words[2]
             if option == "commands":
                 vision.command_parser.list_commands()
+        # Close Vision
         elif command == "stop" or command == "close" and len(words) == 2:
             vision.online = False
+        # Open Program
         elif command == "open":
             self.desktop_handler.open_program(words[2])
+        # Close program
         elif command == "close" and len(words) == 3:
             self.desktop_handler.close_program(words[2])
+        # Text Mode
         elif command == "text" and len(words) > 2:
             option = words[2].lower()
             if option == "on":
                 vision.text_mode = True
             elif option == "off":
                 vision.text_mode = False
+        # Program login
         elif command == "login" and len(words) > 2:
             program_login = words[2].lower()
             if program_login == "spotify":
                 vision.spot_handler.start()
+        # Play Next Spotify Song
+        elif command == "next" and len(words) > 2:
+            if words[2].lower() == "song":
+                vision.spot_handler.play_next_song()
+        # Enter debug mode
+        elif command == "debug" and len(words) > 2:
+            if words[2].lower() == "on":
+                vision.debug_mode = True
+            elif words[2].lower() == "off":
+                vision.debug_mode = False
 
     @staticmethod
-    def get_all_words_until(sentence, words):
+    def get_all_words_until(sentence, words, indices_popped=2):
         """
         Gets all the words until certain other words.
 
         :param sentence: The split list of words from listen()
         :param words: Words to stop at, '?' means the end of the sentence.
+        :param indices_popped: How many words should you pop from the stack.
         """
-        sentence.pop(0)
-        sentence.pop(0)
+        for i in range(indices_popped):
+            sentence.pop(0)
+
         word_dict = dict()
         index = 0
         for i, w in enumerate(words):

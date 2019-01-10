@@ -7,7 +7,8 @@ from spotify_handler import SpotifyHandler
 class Vision:
 
     online = False
-    text_mode = True
+    text_mode = False
+    debug_mode = False
     spot_handler = SpotifyHandler()
     desktop_handler = DesktopHandler("Programs")
     speech_handler = SpeechHandler(desktop_handler)
@@ -15,6 +16,7 @@ class Vision:
 
     def start(self):
         self.online = True
+        self.spot_handler.start(self)
         self.command_parser.get_command_file("commands.json")
         self.speech_handler.listen(self)
 
