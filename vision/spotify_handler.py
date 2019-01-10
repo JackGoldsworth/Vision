@@ -107,3 +107,12 @@ class SpotifyHandler:
 
     def pause_song(self):
         self.sp.pause_playback()
+
+    def resume_song(self):
+        self.sp.start_playback()
+
+    def previous_song(self):
+        self.sp.previous_track()
+
+    def change_spotify_volume(self, percent):
+        self.sp.volume(percent)

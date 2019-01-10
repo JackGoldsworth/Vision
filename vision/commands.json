@@ -31,6 +31,22 @@
     "description": "Goes to the next song",
     "usage": "vision next song"
   },
+  "previous song": {
+    "description": "Goes to the previous song",
+    "usage": "vision previous song"
+  },
+  "pause song": {
+    "description": "Pauses current song",
+    "usage": "vision pause song"
+  },
+  "resume song": {
+    "description": "Resume current song",
+    "usage": "vision resume song"
+  },
+  "spotify volume": {
+    "description": "Change spotify volume by percent",
+    "usage": "vision spotify volume <percent>"
+  },
   "profanity": {
     "description": "Allows the user to turn nsfw mode on or off",
     "usage": "vision profanity <on/off>"

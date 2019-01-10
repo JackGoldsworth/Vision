@@ -1,6 +1,7 @@
 import speech_recognition as sr
 
 from command.command_handler import CommandHandler
+from string_util import StringUtil
 
 
 class SpeechHandler:
@@ -54,8 +55,23 @@ class SpeechHandler:
             return None
         command = words[1].lower()
         # Play Spotify Song or album
-        if command == "play":
+        if command == "play" and len(words) > 2:
             self.command_handler.play_spotify(words, vision)
+        # Pause song
+        if command == "pause" and len(words) > 2:
+            self.command_handler.pause_song(words, vision)
+        # Resume song
+        if command == "resume" and len(words) > 2:
+            self.command_handler.resume_song(words, vision)
+        # Play Next Spotify Song
+        elif command == "next" and len(words) > 2:
+            self.command_handler.next_song(words, vision)
+        # Play previous song
+        elif command == "previous" and len(words) > 2:
+            self.command_handler.previous_song(words, vision)
+        # Change Spotify Volume
+        elif StringUtil.ccs(command, "spotify") and StringUtil.ccs(words[2], "volume"):
+            self.command_handler.change_spotify_volume(words, vision)
         # List commands
         elif command == "list" and len(words) > 2:
             self.command_handler.list_commands(words, vision)
@@ -63,7 +79,7 @@ class SpeechHandler:
         elif command == "close" and len(words) == 2:
             vision.stop()
         # Open Program
-        elif command == "open":
+        elif command == "open" and len(words) > 2:
             self.command_handler.open_program(words)
         # Close program
         elif command == "close" and len(words) == 3:
@@ -74,13 +90,9 @@ class SpeechHandler:
         # Program login
         elif command == "login" and len(words) > 2:
             self.command_handler.program_login(words, vision)
-        # Play Next Spotify Song
-        elif command == "next" and len(words) > 2:
-            self.command_handler.next_song(words, vision)
         # Enter debug mode
         elif command == "debug" and len(words) > 2:
             self.command_handler.change_debug(words, vision)
         # Turns off the profanity filter
-        # TODO: Volume, pause and resume song
         elif command == "profanity" and len(words) > 2:
             self.command_handler.change_profanity(words, vision)
