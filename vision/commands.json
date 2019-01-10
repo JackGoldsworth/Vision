@@ -31,6 +31,10 @@
     "description": "Goes to the next song",
     "usage": "vision next song"
   },
+  "profanity": {
+    "description": "Allows the user to turn nsfw mode on or off",
+    "usage": "vision profanity <on/off>"
+  },
   "text": {
     "description": "Allows the user to turn text mode on or off",
     "usage": "vision text <on/off>"

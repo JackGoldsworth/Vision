@@ -3,7 +3,7 @@ import os
 import spotipy
 import spotipy.util as util
 
-from speech_handler import SpeechHandler
+from string_util import StringUtil
 
 
 class SpotifyHandler:
@@ -20,7 +20,8 @@ class SpotifyHandler:
         that there is a device to append to.
         """
         self.vision = vision
-        username = input("Please enter your Spotify username ")
+        print("Please enter your Spotify username: ")
+        username = input()
         try:
             self.token = util.prompt_for_user_token(username, self.scope)
         except AttributeError:
@@ -56,7 +57,8 @@ class SpotifyHandler:
         """
         search = self.sp.search(name)
         items = [search["tracks"]["items"][0]["uri"]]
-        if search["tracks"]["items"][0]["explicit"] is self.vision.song_profanity:
+        if search["tracks"]["items"][0]["explicit"] is self.vision.settings_handler.get_setting("Spotify",
+                                                                                                "explicit_songs"):
             self.sp.start_playback(self.deviceID, None, items)
 
     def play_specific_artist_song(self, name, artist_name):
@@ -67,15 +69,16 @@ class SpotifyHandler:
         :param artist_name: Singer/Band name.
         """
         search = self.sp.search(str(name).lower(), type='track')
-        if self.vision.debug_mode is True:
+        if self.vision.settings_handler.get_setting("Vision", "debug"):
             print(search)
         items = search["tracks"]["items"]
         for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
-            if SpeechHandler.ccs(name, artist_name):
+            if StringUtil.ccs(name, artist_name):
                 items = [search["tracks"]["items"][i]["uri"]]
-                if search["tracks"]["items"][i]["explicit"] is self.vision.song_profanity:
+                if search["tracks"]["items"][i]["explicit"] is self.vision.settings_handler.get_setting("Spotify",
+                                                                                                        "explicit_songs"):
                     self.sp.start_playback(self.deviceID, None, items)
                     break
 
@@ -87,16 +90,20 @@ class SpotifyHandler:
         :param artist_name: Singer/Band name.
         """
         search = self.sp.search(str(name).lower(), type='album')
-        if self.vision.debug_mode is True:
+        if self.vision.settings_handler.get_setting("Vision", "debug"):
             print(search)
         items = search["albums"]["items"]
         for i, item in enumerate(items):
             artist = item["artists"]
             name = artist[0]["name"]
-            if SpeechHandler.ccs(name, artist_name) and search["albums"]["items"][i]["album_type"] == "album":
+            if StringUtil.ccs(name, artist_name) and search["albums"]["items"][i]["album_type"] == "album":
                 # Checking song profanity
                 items = search["albums"]["items"][i]["uri"]
                 tracks = self.sp.album_tracks(items, 1)
-                if tracks["items"][0]["explicit"] is self.vision.song_profanity:
+                if tracks["items"][0]["explicit"] is self.vision.settings_handler.get_setting("Spotify",
+                                                                                              "explicit_songs"):
                     self.sp.start_playback(self.deviceID, items)
                     break
+
+    def pause_song(self):
+        self.sp.pause_playback()
