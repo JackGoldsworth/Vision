@@ -59,7 +59,6 @@ class SpeechHandler:
                 if "by" in words:
                     self.index = 0
                     final = self.get_all_words_until(words, ["by", "?"], 3)
-                    print(" ".join(final[0]), " ".join(final[1]))
                     spot.play_specific_artist_album(" ".join(final[0]), " ".join(final[1]))
             else:
                 if "by" in words:
