@@ -20,8 +20,9 @@ class Vision:
         self.speech_handler.listen(self)
 
     def stop(self):
-        self.online = False
+        print("Vision shutting down...")
         self.settings_handler.save_settings()
+        self.online = False
 
 
 if __name__ == "__main__":

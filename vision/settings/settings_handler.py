@@ -9,7 +9,6 @@ class SettingsHandler:
         self.file_name = file_name
         with open(file_name) as file:
             self.settings = json.load(file)
-        print(self.settings)
 
     def save_settings(self):
         with open(self.file_name, "w") as file:
