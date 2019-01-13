@@ -96,3 +96,5 @@ class SpeechHandler:
         # Turns off the profanity filter
         elif command == "profanity" and len(words) > 2:
             self.command_handler.change_profanity(words, vision)
+        elif command == "search" and len(words) > 2:
+            self.command_handler.search(words, vision)

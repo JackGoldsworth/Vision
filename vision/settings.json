@@ -1,7 +1,7 @@
 {
   "Vision": {
-    "debug": false,
-    "text_mode": false
+    "debug": true,
+    "text_mode": true
   },
   "Spotify": {
     "explicit_songs": true

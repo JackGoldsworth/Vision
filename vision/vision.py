@@ -1,8 +1,9 @@
 from command import CommandParser
-from desktop_handler import DesktopHandler
+from handlers.desktop_handler import DesktopHandler
+from handlers.search_handler import SearchHandler
+from handlers.speech_handler import SpeechHandler
+from handlers.spotify_handler import SpotifyHandler
 from settings.settings_handler import SettingsHandler
-from speech_handler import SpeechHandler
-from spotify_handler import SpotifyHandler
 
 
 class Vision:
@@ -12,6 +13,7 @@ class Vision:
     speech_handler = SpeechHandler(desktop_handler)
     command_parser = CommandParser()
     settings_handler = SettingsHandler()
+    search_handler = SearchHandler()
 
     def start(self):
         self.online = True

@@ -55,7 +55,7 @@ class SpotifyHandler:
 
         :param name: The track name
         """
-        search = self.sp.search(name)
+        search = self.sp.search(" ".join(name[0]))
         items = [search["tracks"]["items"][0]["uri"]]
         if search["tracks"]["items"][0]["explicit"] is self.vision.settings_handler.get_setting("Spotify",
                                                                                                 "explicit_songs"):

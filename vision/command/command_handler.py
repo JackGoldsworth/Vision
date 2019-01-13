@@ -77,3 +77,7 @@ class CommandHandler:
         option = words[2]
         if option == "commands":
             vision.command_parser.list_commands()
+
+    def search(self, words, vision):
+        query = " ".join(words[2:])
+        vision.search_handler.search(query)
